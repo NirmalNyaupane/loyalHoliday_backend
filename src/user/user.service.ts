@@ -39,7 +39,7 @@ export class UserService {
       _id: id,
     });
 
-    if (throwable.throwErrorOnNotFound) {
+    if (throwable?.throwErrorOnNotFound) {
       if (!user) {
         throw new BadRequestException({
           message: 'User is not found',

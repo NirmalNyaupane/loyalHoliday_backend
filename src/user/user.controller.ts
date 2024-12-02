@@ -1,4 +1,14 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { JwtGuard } from 'src/guards/jwt.guard';
 
 @Controller('user')
-export class UserController {}
+@ApiBearerAuth()
+@ApiTags('user')
+export class UserController {
+  @Get('me')
+  @UseGuards(JwtGuard)
+  async me() {
+    return { message: 'hello' };
+  }
+}
