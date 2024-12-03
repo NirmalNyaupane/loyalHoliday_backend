@@ -2,6 +2,8 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from 'src/user/user.schema';
+import { ChangePasswordDto } from './dto/change-password.dto';
+import { hash, verifyHash } from 'src/utils/hash.util';
 @Injectable()
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
@@ -73,5 +75,33 @@ export class UserService {
       }
     }
     return user;
+  }
+
+  async changePassword(input: ChangePasswordDto) {
+    const user = await this.findUserById(input.userId);
+    
+    //check old password is correct or not
+    const isOldPasswordCorrect = await verifyHash(
+      user.password,
+      input.oldPassword,
+    );
+    if (!isOldPasswordCorrect) {
+      throw new BadRequestException('Password is incorrect');
+    }
+    if (input.oldPassword === input.newPassword) {
+      throw new BadRequestException(
+        'Old password and new password must be difference',
+      );
+    }
+    //hash new password
+    const hashPassword = await hash(input.newPassword);
+    return this.userModel.updateOne(
+      {
+        _id: input.userId,
+      },
+      {
+        password: hashPassword,
+      },
+    );
   }
 }
