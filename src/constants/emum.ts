@@ -1,4 +1,14 @@
 export enum Role {
   USER = 'USER',
   ADMIN = 'ADMIN',
+  MODERATOR='MODERATOR'
+}
+
+export enum FilterDateType{
+  TODAY = 'TODAY',
+  YESTERDAY = 'YESTERDAY',
+  LAST_7_DAYS = 'LAST_7_DAYS',
+  LAST_30_DAYS = 'LAST_30_DAYS',
+  LAST_3_MONTHS = 'LAST_3_MONTHS',
+  CUSTOM = 'CUSTOM',
 }

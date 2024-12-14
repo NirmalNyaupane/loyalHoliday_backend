@@ -4,6 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { PasswordRemoverInterceptor } from './interceptors/password-remover.interceptor';
 import * as cookieParser from 'cookie-parser';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,6 +16,7 @@ async function bootstrap() {
   //remove password from response
   app.useGlobalInterceptors(new PasswordRemoverInterceptor());
   app.use(cookieParser());
+  app.useGlobalPipes(new ValidationPipe());
   const config = new DocumentBuilder()
     .setTitle('loyal holiday')
     .setDescription('This is a api for loyal holiday')
