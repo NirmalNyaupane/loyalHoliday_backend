@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, RootFilterQuery } from 'mongoose';
 import { CreatePostDto } from './dto/create-post.dto';
 import { Post as PostModel } from './post.schema';
 
@@ -18,7 +18,8 @@ export class PostService {
     });
   }
 
-  async getAllPostsOfUsers(userId:string){
-
+  async getAllPostsOfUsers(userId: string) {
+    const baseFilter: RootFilterQuery<PostModel> = { auther: userId };
+    return await this.postModel.find(baseFilter);
   }
 }

@@ -4,7 +4,9 @@ import { User } from 'src/user/user.schema';
 
 export type PostDocument = mongoose.HydratedDocument<Post>;
 
-@Schema()
+@Schema({
+  timestamps: true,
+})
 export class Post {
   @Prop({ required: true, type: String })
   title: string;

@@ -12,11 +12,13 @@ import { FilterDateType } from 'src/constants/emum';
 
 export class PaginatedDto {
   @ApiPropertyOptional()
+  @IsOptional()
   @IsNumber()
   @Min(1)
   page?: number;
 
   @ApiPropertyOptional()
+  @IsOptional()
   @IsNumber()
   @Min(1)
   limit?: number;
@@ -24,6 +26,7 @@ export class PaginatedDto {
 
 export class SearchDto extends PaginatedDto {
   @ApiPropertyOptional()
+  @IsOptional()
   @IsString()
   search?: string;
 }

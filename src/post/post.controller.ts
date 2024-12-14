@@ -1,9 +1,5 @@
 import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiTags
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ActiveUser, GetActiveUser } from 'src/decorators/get-active-user';
 import { JwtGuard } from 'src/guards/jwt.guard';
 import { RoleGuard } from 'src/guards/role.guard';
@@ -33,5 +29,10 @@ export class PostController {
   @ApiOperation({
     summary: 'Get all posts created by current user',
   })
-  async getMyPost(@Query() query:GetUserPostDto) {}
+  async getMyPost(
+    @Query() query: GetUserPostDto,
+    @GetActiveUser() user: ActiveUser,
+  ) {
+    return this.postService.getAllPostsOfUsers(user.id);
+  }
 }

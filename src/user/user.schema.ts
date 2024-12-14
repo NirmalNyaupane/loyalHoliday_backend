@@ -4,7 +4,9 @@ import { Role } from '../constants/emum';
 
 export type UserDocument = HydratedDocument<User>;
 
-@Schema()
+@Schema({
+  timestamps: true,
+})
 export class User {
   @Prop({ required: true, type: String })
   name: string;
