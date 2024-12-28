@@ -13,9 +13,12 @@ jobs:
         node-version: '18.x'
         
     - name: Install pmnpm 
-      uses: pnpm/action-setup@v4
+      uses: pnpm/action-setup@v3
       with:
         version: '9'
+    
+    - name: Clone main repo
+      uses: actions/checkout@v4
 
     - name: Install dependencies
       run: pnpm install
