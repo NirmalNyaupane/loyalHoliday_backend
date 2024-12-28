@@ -33,6 +33,6 @@ export class PostController {
     @Query() query: GetUserPostDto,
     @GetActiveUser() user: ActiveUser,
   ) {
-    return this.postService.getAllPostsOfUsers(user.id);
+    return this.postService.getAllPostsOfUsers(user.id, query);
   }
 }
