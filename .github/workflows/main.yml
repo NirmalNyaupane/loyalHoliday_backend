@@ -24,7 +24,7 @@ jobs:
       run: pnpm install
 
     - name: stop pm2 
-      run: pnpm pm2 stop all
+      run: pm2 stop all
 
     - name: Copy .env file 
       run: |
