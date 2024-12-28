@@ -1,17 +1,18 @@
-name: Forum-app 
+name: Forum App 
+
 on:
   push:
-  branches:[main]
+    branches: [main]
 jobs:
-  build:
+  build-and-deploy:
     runs-on: [self-hosted]
-  steps:
-    - uses: actions/checkout@v4
+    steps:
     - name: Use Node js
       uses: actions/setup-node@v4
       with:
         node-version: '18.x'
-
+        
+    - name: Install pmnpm 
       uses: pnpm/action-setup@v4
       with:
         pnpm-version: '9'
@@ -23,12 +24,11 @@ jobs:
       run: pnpm pm2 stop all
 
     - name: Copy .env file 
-      run: cp "${{secret.env}}" .env
+      run: |
+        echo "${{secrets.ENV_FILE}}" .env
 
     - name: Buid nest js application 
       run: pnpm build
 
     - name: Start pm2
       run: pnpm pm2 start dist/main.js --name forum-app
-
-
