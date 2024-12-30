@@ -14,7 +14,6 @@ export class UserService {
     const user = await this.userModel.findOne({
       email,
     });
-
     if (throwable?.throwErrorOnFound) {
       if (user) {
         throw new BadRequestException({

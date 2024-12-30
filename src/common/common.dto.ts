@@ -2,25 +2,22 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsEnum,
   IsISO8601,
-  IsNumber,
+  IsNumberString,
   IsOptional,
   IsString,
-  Min,
-  ValidateIf,
+  ValidateIf
 } from 'class-validator';
 import { FilterDateType } from 'src/constants/emum';
 
 export class PaginatedDto {
   @ApiPropertyOptional()
   @IsOptional()
-  @IsNumber()
-  @Min(1)
+  @IsNumberString()
   page?: number;
 
   @ApiPropertyOptional()
   @IsOptional()
-  @IsNumber()
-  @Min(1)
+  @IsNumberString()
   limit?: number;
 }
 

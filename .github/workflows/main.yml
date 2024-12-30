@@ -34,4 +34,4 @@ jobs:
       run: pnpm build
 
     - name: Start pm2
-      run: pnpm pm2 start dist/main.js --name forum-app
+      run: pm2 start dist/main.js --name forum-app

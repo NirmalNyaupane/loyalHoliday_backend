@@ -38,7 +38,9 @@ export class AuthService {
   }
 
   async validateUserRoleDuringLogin(email: string, role: Role) {
-    const user = await this.userService.findUserByEmail(email);
+    const user = await this.userService.findUserByEmail(email, {
+      throwErrorOnNotFound: true,
+    });
     if (user.role !== role) {
       throw new BadRequestException(
         'You are not allowed to login using this route',

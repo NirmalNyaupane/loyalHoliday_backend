@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, RootFilterQuery } from 'mongoose';
+import { Model, PaginateModel, RootFilterQuery } from 'mongoose';
 import { CreatePostDto } from './dto/create-post.dto';
 import { Post as PostModel } from './post.schema';
 import { FilterDateType } from 'src/constants/emum';
@@ -10,7 +10,7 @@ import { GetUserPostDto, PostTypes } from './dto/get-post.dto';
 @Injectable()
 export class PostService {
   constructor(
-    @InjectModel(PostModel.name) private postModel: Model<PostModel>,
+    @InjectModel(PostModel.name) private postModel: PaginateModel<PostModel>,
   ) {}
   async createPost(data: CreatePostDto) {
     return await this.postModel.create({
@@ -50,7 +50,7 @@ export class PostService {
         break;
       case PostTypes.PUBLISHED:
         filter.isPublished = true;
-        filter.isVerified = false;
+        filter.isVerified = true;
         break;
     }
     return filter;
@@ -68,6 +68,9 @@ export class PostService {
       ...dateFilter,
       ...postTypeFilter,
     };
-    return await this.postModel.find(finalFilter);
+    return await this.postModel.paginate(finalFilter, {
+      page: query.page,
+      limit: query.limit,
+    });
   }
 }
