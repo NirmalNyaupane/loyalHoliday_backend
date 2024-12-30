@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { IsBoolean, IsNotEmpty, IsString, Length } from 'class-validator';
 
 export class CreatePostDto {
@@ -21,3 +21,5 @@ export class CreatePostDto {
 
   authId: string;
 }
+
+export class UpdatePostDto extends PartialType(CreatePostDto) {} 

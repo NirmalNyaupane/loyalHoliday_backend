@@ -1,9 +1,18 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ActiveUser, GetActiveUser } from 'src/decorators/get-active-user';
 import { JwtGuard } from 'src/guards/jwt.guard';
 import { RoleGuard } from 'src/guards/role.guard';
-import { CreatePostDto } from './dto/create-post.dto';
+import { CreatePostDto, UpdatePostDto } from './dto/create-post.dto';
 import { GetUserPostDto } from './dto/get-post.dto';
 import { PostService } from './post.service';
 
@@ -23,6 +32,18 @@ export class PostController {
   ) {
     data.authId = user.id;
     return this.postService.createPost(data);
+  }
+
+  @Patch(':id')
+  @ApiOperation({
+    summary: 'Update a post by user',
+  })
+  async updatePost(
+    @Body() data: UpdatePostDto,
+    @GetActiveUser() user: ActiveUser,
+    @Param('id') postId: string,
+  ) {
+    return this.postService.updatePost(data, user, postId);
   }
 
   @Get('/my-posts')

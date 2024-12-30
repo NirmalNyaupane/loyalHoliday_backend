@@ -1,17 +1,27 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, PaginateModel, RootFilterQuery } from 'mongoose';
-import { CreatePostDto } from './dto/create-post.dto';
-import { Post as PostModel } from './post.schema';
+import { PaginateModel, RootFilterQuery } from 'mongoose';
 import { FilterDateType } from 'src/constants/emum';
+import { ActiveUser } from 'src/decorators/get-active-user';
 import { findDateRangeForFilter } from 'src/utils/date.util';
+import { CreatePostDto, UpdatePostDto } from './dto/create-post.dto';
 import { GetUserPostDto, PostTypes } from './dto/get-post.dto';
+import { Post as PostModel } from './post.schema';
 
 @Injectable()
 export class PostService {
   constructor(
     @InjectModel(PostModel.name) private postModel: PaginateModel<PostModel>,
   ) {}
+
+  async findOneById(id: string) {
+    const post = await this.postModel.findById(id).exec();
+    if (!post) {
+      throw new BadRequestException('Post is not found');
+    }
+    return post;
+  }
+
   async createPost(data: CreatePostDto) {
     return await this.postModel.create({
       auther: data.authId,
@@ -72,5 +82,19 @@ export class PostService {
       page: query.page,
       limit: query.limit,
     });
+  }
+
+  async updatePost(data: UpdatePostDto, user: ActiveUser, postId: string) {
+    const post = await this.findOneById(postId);
+    if (post.auther._id.toString() !== user.id) {
+      throw new BadRequestException('You are not allowed to update this post');
+    }
+    return await this.postModel.findOneAndUpdate(
+      {
+        _id: postId,
+      },
+      data,
+      { new: true },
+    );
   }
 }

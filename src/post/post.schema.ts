@@ -26,7 +26,7 @@ export class Post extends mongoose.Document {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   })
-  auther: User[]; //auther of the post
+  auther: User; //auther of the post
 }
 
 export const PostSchema = SchemaFactory.createForClass(Post);
